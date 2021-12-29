@@ -18,23 +18,20 @@ def describe_chord(notes):
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((800, 600))
+    pygame.display.set_mode((800, 600))
     
     clock = pygame.time.Clock()
 
     running = True
-    counter = 0
     
-    pygame.font.init()
     pygame.midi.init()
-    font = pygame.font.SysFont("Arial", 30)
 
     if pygame.midi.get_count() == 0:
         print("No MIDI devices detected")
         exit()
     
     default_id = pygame.midi.get_default_input_id()
-    print(pygame.midi.get_device_info(default_id))
+    print("Device: " + str(pygame.midi.get_device_info(default_id)))
     input = pygame.midi.Input(default_id)
 
     notes = set()
@@ -43,8 +40,6 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        pygame.display.flip()
-        counter+=1
 
         while input.poll():
             event = input.read(1)[0][0]
@@ -54,7 +49,6 @@ def main():
                 print("Chord: " + str(describe_chord(notes)))
             elif event[0] == 128:
                 notes.remove(event[1])
-
         
         clock.tick(144)
 
